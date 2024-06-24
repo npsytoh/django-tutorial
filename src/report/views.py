@@ -1,28 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView
+from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.urls import reverse_lazy
 from .models import ReportModel
 from .forms import ReportFormClass
 from .forms import ImageUploadForm
 
 
-def reportListView(request):
+class ReportListView(ListView):
     template_name = 'report/report-list.html'
-    obj = ReportModel.objects.all()
-    ctx = {
-        'object_lists': obj
-    }
-    return render(request, template_name, ctx)
+    context_object_name = 'object_lists'
+    model = ReportModel
+
+    def get_context_data(self):
+        ctx = super().get_context_data()
+        ctx['page_title'] = '一覧'
+        return ctx
 
 
-def reportDetailView(request, pk):
+class ReportDetailView(DetailView):
     template_name = 'report/report-detail.html'
-    #obj = ReportModel.objects.get(pk=pk)
-    obj = get_object_or_404(ReportModel, pk=pk)
-    ctx = {
-        'objects': obj,
-    }
-    return render(request, template_name, ctx)
+    context_object_name = 'objects'
+    model = ReportModel
 
 
 def reportCreateView(request):
@@ -31,14 +29,14 @@ def reportCreateView(request):
     ctx = {
         'form': form
     }
-    
+
     if form.is_valid():
         title = form.cleaned_data['title']
         content = form.cleaned_data['content']
         obj = ReportModel(title=title, content=content)
         obj.save()
         return redirect('report:report-list')
-    
+
     return render(request, template_name, ctx)
 
 
@@ -61,7 +59,7 @@ def reportUpdateView(request, pk):
 
         if request.method == 'POST':
             return redirect('report:report-list')
-    
+
     return render(request, template_name, ctx)
 
 

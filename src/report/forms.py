@@ -4,7 +4,14 @@ from .models import ImageUpload
 class ReportFormClass(forms.Form):
 
     def __init__(self, *args, **kwargs):
+
+        #デフォルト値
         self.base_fields['title'].initial = 'default'
+
+        #クラス付与
+        for field in self.base_fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+
         super().__init__(*args, **kwargs)
 
     title = forms.CharField(label='タイトル', widget=forms.TextInput(attrs={'placeholder':'タイトル'}))

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}日報アプリ{% endblock %}
+{% block title %}日報アプリ | {{ page_title }}{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -14,10 +14,9 @@
                         <a href={% url 'report:report-detail' obj.pk %}>{{ obj.title}}</a>
                     </h5>
                     <p class="card-text">{{ obj.content }}</p>
-                    <a href={% url 'report:report-update' obj.pk %} class="card-link">編集</a>
-                    <a href={% url 'report:report-delete' obj.pk %} class="card-link">削除</a>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

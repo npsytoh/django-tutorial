@@ -12,9 +12,10 @@
                 <p class="card-text">{{ objects.content }}</p>
                 <div class="w-50">
                     <a href={% url 'report:report-update' objects.pk %} class="btn btn-primary btn-sm">編集</a>
-                    <a href={% url 'report:report-delete' objects.pk %} class="btn btn-danger btn-sm">削除</a>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{objects.pk}}">削除</button>
+                    {% include 'report/report-delete.html' %}
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 {% endblock %}
