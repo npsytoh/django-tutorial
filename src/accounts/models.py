@@ -6,7 +6,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None):
         if not email:
             raise ValueError('Users must have an email address')
-        
+
         user = self.model(
             email=self.normalize_email(email),
         )
@@ -44,7 +44,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     objects = UserManager()
 
-    def __str__(self):             
+    def __str__(self):
         return self.email
 
     def has_perm(self, perm, obj=None):

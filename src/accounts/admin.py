@@ -24,7 +24,7 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('email', 'password', 'password2')
         }),
     )
-    
+
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Permissions', {'fields': ('staff','admin',)}),
