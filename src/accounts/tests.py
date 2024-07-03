@@ -12,9 +12,17 @@ class UserTestCase(TestCase):
     # signupページでユーザーを作成し、Eメール確認も済にする
     def setUp(self):
         self.email = "test@sample.jp"
-        self.password = "somepass"
+        self.password = "testpassword"
         self.res = self.client.post(signup_url, {"email": self.email, "password1": self.password, "password2": self.password})
+
         self.user_obj = User.objects.first()
+        if self.user_obj is None:
+            raise ValueError("ユーザーが作成されませんでした。")
+
+        self.email_obj = self.user_obj.emailaddress_set.first()
+        if self.email_obj is None:
+            raise ValueError("Eメール確認オブジェクトが見つかりませんでした。")
+
         self.email_obj = self.user_obj.emailaddress_set.first()
         self.email_obj.verified = True
         self.email_obj.save()
@@ -51,7 +59,7 @@ class UserTestCase(TestCase):
         c = Client()
         res_bool = c.login(email=self.email, password=self.password)
         self.assertEqual(res_bool, True)
-    
+
     # verifiedされていないユーザーの場合はログインできない？
     def test_not_verified_user_login(self):
         res = self.client.post(signup_url, {"email": "not-verifed@sample.jp", "password1": "somepassword", "password2": "somepassword"})

@@ -28,6 +28,11 @@ class ReportCreateFormView(FormView):
     form_class = ReportModelForm
     success_url = reverse_lazy('report:report-list')
 
+    def get_form_kwargs(self):
+        kwgs = super().get_form_kwargs()
+        kwgs['user'] = self.request.user
+        return kwgs
+
     def form_valid(self, form):
         data = form.cleaned_data
         obj = ReportModel(**data)
