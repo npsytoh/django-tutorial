@@ -1,9 +1,21 @@
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+
 from .models import ReportModel
 from .forms import ReportModelForm
 from .forms import ImageUploadForm
+
+
+class OwnerOnly(UserPassesTestMixin):
+    def test_func(self):
+        report_instance = self.get_object()
+        return report_instance.user == self.request.user
+
+    def handle_no_permission(self):
+        return redirect('report:report-detail', pk=self.kwargs['pk'])
 
 
 class ReportListView(ListView):
@@ -23,7 +35,7 @@ class ReportDetailView(DetailView):
     model = ReportModel
 
 
-class ReportCreateFormView(FormView):
+class ReportCreateFormView(LoginRequiredMixin, FormView):
     template_name = 'report/report-form.html'
     form_class = ReportModelForm
     success_url = reverse_lazy('report:report-list')
@@ -34,20 +46,20 @@ class ReportCreateFormView(FormView):
         return kwgs
 
     def form_valid(self, form):
-        data = form.cleaned_data
-        obj = ReportModel(**data)
+        obj = form.save(commit=False)
+        obj.user = self.request.user
         obj.save()
         return super().form_valid(form)
 
 
-class ReportUpdateFormView(UpdateView):
+class ReportUpdateFormView(OwnerOnly, UpdateView):
     template_name = 'report/report-form.html'
     model = ReportModel
     form_class = ReportModelForm
     success_url = reverse_lazy('report:report-list')
 
 
-class ReportDeleteView(DeleteView):
+class ReportDeleteView(OwnerOnly, DeleteView):
     template_name = 'report/report-delete.html'
     context_object_name = 'objects'
     model = ReportModel
