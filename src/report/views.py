@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 from .models import ReportModel
 from .forms import ReportModelForm
@@ -15,6 +16,7 @@ class OwnerOnly(UserPassesTestMixin):
         return report_instance.user == self.request.user
 
     def handle_no_permission(self):
+        messages.error(self.request, 'ご自身の日報でのみ編集・削除可能です')
         return redirect('report:report-detail', pk=self.kwargs['pk'])
 
 
