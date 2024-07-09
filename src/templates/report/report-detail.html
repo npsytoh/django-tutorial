@@ -5,16 +5,14 @@
     <div class="container">
         <div class="card mx-auto my-5 w-50" style="min-width:300px;">
             <div class="card-header">
-                {{ objects.timestamp }}
+                【作成日時】{{ objects.timestamp }}
             </div>
             <div class="card-body">
-                <h3 class="card-title">{{ objects.title }} </h3>
-                <p class="card-text">{{ objects.content }}</p>
-                <div class="w-50">
-                    <a href={% url 'report:report-update' objects.pk %} class="btn btn-primary btn-sm">編集</a>
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{objects.pk}}">削除</button>
-                    {% include 'report/report-delete.html' %}
-                </div>
+                <h3 class="card-title mb-3 px-2">{{ objects.title }} </h3>
+                <p class="card-text my-3 px-5">{{ objects.content }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'report:report-list' %}" class="btn btn-danger btn-sm">戻る</a>
             </div>
         </div>
     </div>
