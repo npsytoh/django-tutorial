@@ -4,8 +4,6 @@ from django.contrib.auth import get_user, get_user_model
 
 User = get_user_model()
 
-GENDER_CHOICE = [(None, "--"), ("m", "男性"), ("f", "女性")]
-
 def save_path(instance, filename):
     ext = filename.split('.')[-1]
     new_name = instance.title + '_saved'
@@ -24,18 +22,6 @@ class ReportModel(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username = models.CharField(max_length=100, verbose_name="ユーザー名")
-    department = models.CharField(max_length=100, blank=True, null=True, verbose_name="部署")
-    phone_number = models.IntegerField(blank=True, null=True, verbose_name="携帯番号")
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICE, default=None, verbose_name="性別", blank=True, null=True)
-    birthday = models.DateField(blank=True, null=True, verbose_name="生年月日")
-
-    def __str__(self):
-        return self.username
 
 
 class ImageUpload(models.Model):

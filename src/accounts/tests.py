@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.test.client import RequestFactory
 
+from .models import Profile
 from django.contrib.auth import get_user_model, login
 
 User = get_user_model()
@@ -67,3 +68,21 @@ class UserTestCase(TestCase):
         c = Client()
         res_bool = c.login(email="not-verified@sample.jp", password="somepassword")
         self.assertEqual(res_bool, False)
+
+
+class AccountsTestCase(TestCase):
+    def __init__(self, *args, **kwargs):
+        self.email = "test@sample.jp"
+        self.password = "testpassword"
+        super().__init__(*args, **kwargs)
+
+    def setUp(self):
+        user_obj = User(email=self.email)
+        user_obj.set_password(self.password)
+        user_obj.save()
+
+    def test_profile_saved(self):
+        counter = Profile.objects.count()
+        self.assertEqual(counter, 1)
+        profile_obj = Profile.objects.first()
+        self.assertEqual(profile_obj.user.email, profile_obj.username)
