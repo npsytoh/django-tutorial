@@ -16,7 +16,7 @@ class OwnProfileOnly(UserPassesTestMixin):
 
 
 class ProfileUpdateView(OwnProfileOnly, UpdateView):
-    template_name = "accounts/profile-form.html"
+    template_name = "account/profile-form.html"
     model = Profile
     form_class=ProfileUpdateForm
     success_url = reverse_lazy("report:report-list")
