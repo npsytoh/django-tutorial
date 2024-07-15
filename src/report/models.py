@@ -15,6 +15,7 @@ class ReportModel(models.Model):
     title = models.CharField(max_length=100, verbose_name='タイトル')
     content = models.TextField(max_length=1000, verbose_name='内容')
     timestamp = models.DateTimeField(auto_now_add=True)
+    public = models.BooleanField(default=False, verbose_name='公開する')
 
     class Meta():
         verbose_name = '日報'

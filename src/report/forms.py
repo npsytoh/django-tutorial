@@ -11,8 +11,11 @@ class ReportModelForm(forms.ModelForm):
         self.user = user
         self.base_fields['title'].initial = 'default'
         #クラス付与
-        for field in self.base_fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+        for key, field in self.base_fields.items():
+            if key != "public":
+                field.widget.attrs["class"] = "form-control"
+            else:
+                field.widget.attrs["class"] = "form-check-input"
         super().__init__(*args, **kwargs)
 
     def save(self, commit=True):

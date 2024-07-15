@@ -10,25 +10,35 @@
             </div>
         {% endif %}
         {% if object_lists %}
-            {% for obj in object_lists %}
-                <div class="card my-3">
+            {% for obj in object_list %}
+                <div class="card my-3 mx-auto" style="max-width:700px;">
+                    <div class="card-header">
+                        {{ obj.timestamp|date:"Y年n年j日" }}
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">
-                            {% if obj.user == request.user %}
-                                <span class="float-end text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{obj.pk}}">
-                                    <i class="bi bi-trash-fill"></i>
-                                </span>
-                                <a href="{% url 'report:report-detail' obj.pk %}">{{ obj.title}}</a>
-                            {% else %}
-                                <a href="{% url 'report:report-detail' obj.pk %}">{{ obj.title}}</a>
-                            {% endif %}
+                        {% if obj.user == request.user %}
+                            <a href="{% url 'report:report-update' obj.pk %}">
+                                {{ obj.title}}<span style="font-size:10px;">(編集)</span>
+                        {% else %}
+                            <a href="{% url 'report:report-detail' obj.pk %}">
+                                {{ obj.title}}
+                        {% endif %}
+                            </a>
                         </h5>
-                        <p class="card-text">{{ obj.content }}</p>
+                        <p class="card-text">
+                            {{ obj.content }}
+                        </p>
                     </div>
                     <div class="card-footer">
+                    by 
+                    {% if obj.user == request.user %}
+                        <span class="badge bg-primary">あなた</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
+                    {% endif %}                 
                     </div>
                 </div>
-                {% include 'report/report-delete.html' with objects=obj %}
             {% endfor %}
         {% else %}
             <div>日報が見つかりません</div>

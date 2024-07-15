@@ -1,9 +1,11 @@
+from django.db.models.query import QuerySet
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
 
 from .models import ReportModel
 from .forms import ReportModelForm
@@ -25,6 +27,15 @@ class ReportListView(ListView):
     context_object_name = 'object_lists'
     model = ReportModel
 
+    def get_queryset(self):
+        qs = ReportModel.objects.all()
+        if self.request.user.is_authenticated:
+            qs = qs.filter(Q(public=True)|Q(user=self.request.user))
+        else:
+            qs = qs.filter(public=True)
+        qs = qs.order_by('-timestamp')
+        return qs
+    
     def get_context_data(self):
         ctx = super().get_context_data()
         ctx['page_title'] = '一覧'
