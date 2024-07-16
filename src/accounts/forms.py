@@ -2,6 +2,8 @@ from django import forms
 from django.forms.fields import DateField
 from django.utils.translation import gettext, gettext_lazy as _
 from django.contrib.auth.forms import UserChangeForm
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from .models import User, Profile, GENDER_CHOICE
 
@@ -11,7 +13,7 @@ class CustomAdminChangeForm(UserChangeForm):
 #Profileクラスのフィールドを追記します
     username = forms.CharField(max_length=100)
     department = forms.CharField(max_length=100, required=False)
-    phone_number = forms.IntegerField(required=False) 
+    phone_number = forms.IntegerField(required=False)
     gender = forms.ChoiceField(choices=GENDER_CHOICE, required=False)
     birthday = DateField(required=False)
 
@@ -63,3 +65,12 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ['user']
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        user_email = self.instance.user.email
+        if username == user_email:
+            raise ValidationError(_('ユーザー名を変更してください'), code='invalid username')
+        elif '@' in username:
+            raise ValidationError(_('ユーザー名にEメールアドレスは使用できません'), code='no email')
+        return username
