@@ -1,18 +1,9 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
 
+from utils.access_restrictions import OwnProfileOnly
 from .models import Profile
 from .forms import ProfileUpdateForm
-
-
-class OwnProfileOnly(UserPassesTestMixin):
-    def test_func(self):
-        profile_obj = self.get_object()
-        try:
-            return profile_obj == self.request.user.profile
-        except:
-            return False
 
 
 class ProfileUpdateView(OwnProfileOnly, UpdateView):
