@@ -4,7 +4,7 @@ from .models import ReportModel, ImageUpload
 class ReportModelForm(forms.ModelForm):
     class Meta:
         model = ReportModel
-        exclude = ['user']
+        exclude = ['user', 'slug']
 
     def __init__(self, user=None, *args, **kwargs):
         #デフォルト値

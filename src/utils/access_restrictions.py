@@ -9,7 +9,7 @@ class OwnerOnly(UserPassesTestMixin):
 
     def handle_no_permission(self):
         messages.error(self.request, 'ご自身の日報でのみ編集・削除可能です')
-        return redirect('report:report-detail', pk=self.kwargs['pk'])
+        return redirect('report:report-detail', slug=self.kwargs['slug'])
 
 class OwnProfileOnly(UserPassesTestMixin):
     def test_func(self):

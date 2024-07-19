@@ -1,14 +1,25 @@
 from django.db import models
-from django.contrib.auth import get_user, get_user_model
+from django.db.models import Q
+from django.contrib.auth import get_user_model
+
+from utils.random_string import random_string_generator
 
 
 User = get_user_model()
+
+def slug_maker():
+    repeat = True
+    while repeat:
+        new_slug = random_string_generator()
+        counter = ReportModel.objects.filter(slug=new_slug).count()
+        if counter == 0:
+            repeat = False
+    return new_slug
 
 def save_path(instance, filename):
     ext = filename.split('.')[-1]
     new_name = instance.title + '_saved'
     return f'files/{new_name}.{ext}'
-
 
 class ReportModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -16,6 +27,7 @@ class ReportModel(models.Model):
     content = models.TextField(max_length=1000, verbose_name='内容')
     timestamp = models.DateTimeField(auto_now_add=True)
     public = models.BooleanField(default=False, verbose_name='公開する')
+    slug = models.SlugField(max_length=20, unique=True, default=slug_maker)
 
     class Meta():
         verbose_name = '日報'
@@ -23,7 +35,6 @@ class ReportModel(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class ImageUpload(models.Model):
     title = models.CharField(max_length=100)

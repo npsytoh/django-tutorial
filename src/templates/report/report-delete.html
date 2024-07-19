@@ -11,7 +11,7 @@
                 <p>削除すると元に戻すことはできません。よろしいでしょうか？</p>
             </div>
             <div class="modal-footer">
-                <form method="POST" action="{% url 'report:report-delete' objects.pk %}">{% csrf_token %}
+                <form method="POST" action="{% url 'report:report-delete' objects.slug %}">{% csrf_token %}
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-danger">DELETE</button>
                 </form>

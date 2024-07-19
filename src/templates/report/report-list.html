@@ -18,10 +18,10 @@
                     <div class="card-body">
                         <h5 class="card-title">
                         {% if obj.user == request.user %}
-                            <a href="{% url 'report:report-update' obj.pk %}">
+                            <a href="{% url 'report:report-update' obj.slug %}">
                                 {{ obj.title}}<span style="font-size:10px;">(編集)</span>
                         {% else %}
-                            <a href="{% url 'report:report-detail' obj.pk %}">
+                            <a href="{% url 'report:report-detail' obj.slug %}">
                                 {{ obj.title}}
                         {% endif %}
                             </a>
@@ -31,12 +31,12 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                    by 
+                    by
                     {% if obj.user == request.user %}
                         <span class="badge bg-primary">あなた</span>
                     {% else %}
                         <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
-                    {% endif %}                 
+                    {% endif %}
                     </div>
                 </div>
             {% endfor %}

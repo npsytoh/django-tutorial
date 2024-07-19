@@ -22,7 +22,7 @@ class ReportListView(ListView):
             qs = qs.filter(public=True)
         qs = qs.order_by('-timestamp')
         return qs
-    
+
     def get_context_data(self):
         ctx = super().get_context_data()
         ctx['page_title'] = '一覧'
