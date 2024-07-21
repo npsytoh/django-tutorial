@@ -3,27 +3,31 @@
 {% block title %}日報アプリ | {{ page_title }}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        {% if request.user.is_authenticated %}
-            <div class="mt-3 d-flex justify-content-end">
-                <a href="{% url 'report:report-create' %}" class="btn btn-outline-primary float-right">+ 新規作成</a>
-            </div>
-        {% endif %}
-        {% if object_lists %}
-            {% for obj in object_list %}
-                <div class="card my-3 mx-auto" style="max-width:700px;">
+<div class="container">
+    <h2 class="my-3 text-start mx-auto" style="max-width:700px;">{% if not profile %}日報リスト一覧{% else %}{{ profile.username }}の日報一覧{% endif %}</h2>
+</div>
+<div class="container d-flex justify-content-center flex-wrap-reverse py-3">
+    <div class="flex-grow-1"><!-- 一覧リストdi-->
+        {% if filter.qs %}
+            {% for obj in filter.qs %}
+                <div class="card mx-auto mb-2" style="max-width:700px; min-width:300px;">
                     <div class="card-header">
-                        {{ obj.timestamp|date:"Y年n年j日" }}
+                        {{ obj.date|date:"Y年n年j日" }}
+                        {% if not obj.public %}
+                            <span class="badge bg-secondary">下書き</span>
+                        {% endif %}
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">
-                        {% if obj.user == request.user %}
-                            <a href="{% url 'report:report-update' obj.slug %}">
-                                {{ obj.title}}<span style="font-size:10px;">(編集)</span>
+                        {% if obj.user == request.user %} 
+                            <span class="float-end text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-{{obj.slug}}">
+                                <i class="bi bi-trash-fill"></i>
+                            </span>
+                                <a href="{% url 'report:report-update' obj.slug %}">
                         {% else %}
                             <a href="{% url 'report:report-detail' obj.slug %}">
-                                {{ obj.title}}
                         {% endif %}
+                                {{ obj.title }}
                             </a>
                         </h5>
                         <p class="card-text">
@@ -31,18 +35,21 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                    by
-                    {% if obj.user == request.user %}
-                        <span class="badge bg-primary">あなた</span>
-                    {% else %}
-                        <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
-                    {% endif %}
+                        by 
+                        {% if obj.user == request.user %}
+                            <span class="badge bg-primary">あなた</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ obj.user.profile.username }}</span>
+                        {% endif %} 
                     </div>
                 </div>
+                {% include "report/report-delete.html" with objects=obj %}
             {% endfor %}
         {% else %}
-            <div>日報が見つかりません</div>
+            <div>表示する日報がありません。</div>
         {% endif %}
-        </div>
-    </div>
+    </div><!-- 一覧リストdiv終了-->
+    <!-- 右側を表示する -->
+    {% include 'report/report-filter.html' %}
+  </div>
 {% endblock %}

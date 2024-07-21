@@ -1,7 +1,14 @@
 from django import forms
+from bootstrap_datepicker_plus.widgets import DatePickerInput
+
 from .models import ReportModel, ImageUpload
 
+
 class ReportModelForm(forms.ModelForm):
+    date = forms.DateField(
+        label='作成日',
+        widget=DatePickerInput(format='%Y-%m-%d')
+    )
     class Meta:
         model = ReportModel
         exclude = ['user', 'slug']

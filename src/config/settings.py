@@ -27,9 +27,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_filters',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
     'crispy_forms',
     'report',
     'accounts'
@@ -59,6 +62,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'builtins':[ 
+                'bootstrap4.templatetags.bootstrap4',
             ],
         },
     },
@@ -150,3 +156,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 ACCOUNT_ADAPTER = "accounts.adapter.MyReportAdapter"
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}

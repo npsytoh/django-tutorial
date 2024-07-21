@@ -1,7 +1,7 @@
 <nav class="navbar navbar-dark bg-primary">
     <div class="container-fluid">
       <div>
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'report:report-list' %}">
             <i class="bi bi-bootstrap-fill" style="font-size: 2rem;"></i>
         </a>
       </div>
@@ -18,7 +18,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               {% if request.user.is_authenticated %}
-                  <li><a class="dropdown-item" href="{% url 'profile-update' 1 %}">アカウント設定</a></li>
+                  <li><a class="dropdown-item" href="{% url 'profile-update' request.user.profile.pk %}">アカウント設定</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{% url 'account_logout' %}">ログアウト</a></li>
               {% else %}

@@ -4,9 +4,11 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 
 from utils.access_restrictions import OwnerOnly
+from accounts.models import Profile
 from .models import ReportModel
 from .forms import ReportModelForm
 from .forms import ImageUploadForm
+from .filters import ReportModelFilter
 
 
 class ReportListView(ListView):
@@ -20,12 +22,17 @@ class ReportListView(ListView):
             qs = qs.filter(Q(public=True)|Q(user=self.request.user))
         else:
             qs = qs.filter(public=True)
-        qs = qs.order_by('-timestamp')
+        qs = qs.order_by('-date')
         return qs
 
     def get_context_data(self):
         ctx = super().get_context_data()
         ctx['page_title'] = '一覧'
+        ctx['filter'] = ReportModelFilter(self.request.GET, queryset=self.get_queryset())
+        profile_id = self.request.GET.get('profile')
+        q = Profile.objects.filter(id=profile_id)
+        if q.exists():
+            ctx['profile'] = q.first()
         return ctx
 
 class ReportDetailView(DetailView):

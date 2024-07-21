@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from utils.random_string import random_string_generator
 
@@ -16,6 +17,10 @@ def slug_maker():
             repeat = False
     return new_slug
 
+def get_profile_page_url(self):
+    from django.urls import reverse_lazy
+    return reverse_lazy('report:report-list') + f'?profile={self.user.profile.id}'
+
 def save_path(instance, filename):
     ext = filename.split('.')[-1]
     new_name = instance.title + '_saved'
@@ -23,6 +28,7 @@ def save_path(instance, filename):
 
 class ReportModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
     title = models.CharField(max_length=100, verbose_name='タイトル')
     content = models.TextField(max_length=1000, verbose_name='内容')
     timestamp = models.DateTimeField(auto_now_add=True)
