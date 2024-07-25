@@ -2,13 +2,7 @@ from pathlib import Path
 from django.urls import reverse_lazy
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = 'django-insecure-ga=p%)tewfa3-20hjr93_-k0tqwv*yrdj2$42^q@xsj60eucgz'
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -63,31 +57,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DATABASES = {
-    'default': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'django_tutorial',
-         'USER': 'djangouser',
-         'PASSWORD': 'pdjangouser',
-         'HOST': 'localhost',
-         'PORT': '5432',
-     }
-}
+LANGUAGE_CODE = 'ja'
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+TIME_ZONE = 'Asia/Tokyo'
+
+USE_I18N = True
+
+USE_TZ = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -97,22 +75,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SITE_ID = 1
-
-LANGUAGE_CODE = 'ja'
-
-TIME_ZONE = 'Asia/Tokyo'
-
-USE_I18N = True
-
-USE_TZ = True
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [ BASE_DIR / 'static']
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
@@ -127,11 +89,3 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_LOGOUT_ON_GET = True
 
 ACCOUNT_ADAPTER = "accounts.adapter.MyReportAdapter"
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-BOOTSTRAP4 = {
-    'include_jquery': True,
-}
